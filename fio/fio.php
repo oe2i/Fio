@@ -9,7 +9,8 @@ class Fio
 	protected static string $DS;
 	protected static string $PS;
 	protected static string $RD;
-
+	protected static object $site;
+	protected static object $database;
 
 
 	// • === init »
@@ -19,11 +20,39 @@ class Fio
 			if (isset($prop['RD'])) {
 				self::$RD = $prop['RD'];
 			}
+			if (isset($prop['site'])) {
+				self::site($prop['site']);
+			}
+			if (isset($prop['database'])) {
+				self::database($prop['database']);
+			}
 			self::$DS = DIRECTORY_SEPARATOR;
 			self::$PS = '/';
 			self::$init = true;
 		}
 	}
+
+
+
+	// • === property »
+	public static function property(string|array $prop)
+	{
+		// ➝ get property
+		if (is_string($prop) && isset(self::${$prop})) {
+			return self::${$prop};
+		}
+
+		// ➝ set property
+		if (is_array($prop)) {
+			foreach ($prop as $property => $value) {
+				self::${$property} = $value;
+			}
+			return true;
+		}
+
+		return false;
+	}
+
 
 
 	// • === dump »
@@ -35,7 +64,7 @@ class Fio
 
 
 	// • === kill »
-	public static function kill($error)
+	public static function kill($error, $extra = null)
 	{
 		$output = '';
 		if (is_string($error)) {
@@ -48,10 +77,69 @@ class Fio
 			$output .= '<strong style="color:#B39062;">' . $title . '</strong>:';
 		}
 		if (!empty($message)) {
-			$output .= '<span style="color:#7B027B; padding: 2px;">' . $message . '</span>';
+			if (!empty($extra)) {
+				$message .= ' ➝ [<small style="color: #A62626;"><em>' . $extra . '</em></small>]';
+			}
+			$output .= '<span style="color:#7B027B; padding: 2px;">' . ucfirst($message) . '</span>';
 		}
 		exit($output);
 	}
+
+
+
+	// • === site » set & get
+	public static function site(null|string|object|array $param = null)
+	{
+		// ➝ get self::$site
+		if (!$param) {
+			return self::$site ?? null;
+		}
+
+		// ➝ get self::$site->$param
+		if (is_string($param)) {
+			return isset(self::$site) && is_object(self::$site) && property_exists(self::$site, $param)	? self::$site->$param : null;
+		}
+
+		// ➝ convert $param array to object (when applicable)
+		if (is_array($param)) {
+			$param = (object) $param;
+		}
+
+		// ➝ set self::$site
+		if (is_object($param)) {
+			return self::property(['site' => $param]);
+		}
+	}
+
+
+
+	// • === database » set & get
+	public static function database(null|string|object|array $param = null)
+	{
+		if (!$param) {
+			return self::$database ?? null;
+		}
+		if (is_string($param)) {
+			return isset(self::$database) && is_object(self::$database) && property_exists(self::$database, $param)	? self::$database->$param : null;
+		}
+		if (is_array($param)) {
+			$param = (object) $param;
+		}
+		if (is_object($param)) {
+			return self::property(['database' => $param]);
+		}
+	}
+
+
+
+	// public static function varToArray($var){
+	// 	if(is_string($var)){
+	// 		$vars = get_defined_vars();
+	// 		$varName = array_search($var, $vars, true);
+	// 		// $var = compact($var);
+	// 	}
+	// 	return $vars;
+	// }
 
 
 
@@ -63,10 +151,34 @@ class Fio
 
 
 
+	// • === path »
+	public static function path()
+	{
+		return new oPath();
+	}
+
+
+
 	// • === layout »
 	public static function layout()
 	{
 		return new oLayout();
+	}
+
+
+
+	// • === asset »
+	public static function asset()
+	{
+		return new oAsset();
+	}
+
+
+
+	// • === frontend »
+	public static function frontend()
+	{
+		return new oFrontend();
 	}
 
 
