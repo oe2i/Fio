@@ -32,7 +32,7 @@ class oFrontend
 	// • === copyright »
 	public static function copyright($reserved = true)
 	{
-		$o = "&copy; " . '<strong>' . date('Y') . ' ' . Fio::site('firm') . '</strong>';
+		$o = "&copy; " . '<strong>' . date('Y') . ' ' . Fio::site('firm') . '.</strong>';
 		if ($reserved === true) {
 			$o .= ' All Rights Reserved.';
 		}
