@@ -1,0 +1,32 @@
+<?php //*** oPath - ... » Fio™ © 2025 ∞ OE2i™ • www.oe2i.com ∞ Apache License ***//
+
+namespace Fio;
+
+class oPath
+{
+	// • property
+	private static bool $init = false;
+
+
+	// • === source »
+	public static function source()
+	{
+		return Fio::property('RD') . Fio::property('DS');
+	}
+
+
+
+	// • === layout »
+	public static function layout()
+	{
+		return self::source() . 'layout' . Fio::property('DS');
+	}
+
+
+
+	// • === slice »
+	public static function slice()
+	{
+		return self::layout() . 'slice' . Fio::property('DS');
+	}
+}
