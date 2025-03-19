@@ -1,0 +1,29 @@
+RewriteEngine On
+RewriteOptions inherit
+AddDefaultCharset utf-8
+RewriteBase /
+Options All -Indexes
+
+# Custom error pages
+ErrorDocument 403 /source/error/403.php
+ErrorDocument 404 /source/error/404.php
+ErrorDocument 500 /source/error/500.php
+
+# Exclude existing files and directories inside /source/
+RewriteCond %{DOCUMENT_ROOT}/source%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/source%{REQUEST_URI} -d
+RewriteRule ^ source%{REQUEST_URI} [L]
+
+# Redirect directory [/path/ ➝ /source/path/index.php] (if found)
+RewriteCond %{DOCUMENT_ROOT}/source/$1/index.php -f
+RewriteRule ^([^/.]+)/$ source/$1/index.php [L]
+
+# Rewrite /path ➝ /source/path.php (if it exists)
+RewriteCond %{DOCUMENT_ROOT}/source/$1.php -f
+RewriteRule ^([^/.]+)$ source/$1.php [L]
+
+# Prevent infinite loop: Ensure /source/{requested} does not already exist before redirecting
+RewriteCond %{REQUEST_URI} !^/source/.*$
+RewriteCond %{DOCUMENT_ROOT}/source/$1 !-f
+RewriteCond %{DOCUMENT_ROOT}/source/$1 !-d
+RewriteRule ^(.*)$ source/$1 [L]
