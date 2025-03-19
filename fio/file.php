@@ -4,9 +4,6 @@ namespace Fio;
 
 class oFile
 {
-	// • property
-	private static bool $init = false;
-
 
 	// • === path »
 	public static function path($file, $real = false)
