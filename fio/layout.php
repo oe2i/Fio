@@ -13,9 +13,9 @@ class oLayout
 
 
 	// • === head »
-	public static function head($file = 'head')
+	public static function head($file = 'head', $title = null)
 	{
-		return oInc::slice($file);
+		return oInc::slice($file, ['title' => $title]);
 	}
 
 

@@ -16,9 +16,9 @@ class oInc
 		// 	$vars = compact('vars');
 		// }
 		// Fio::dump($vars);
-		// if (is_array($vars)) {
-		// 	extract($vars);
-		// }
+		if (is_array($vars)) {
+			extract($vars);
+		}
 		global $fio;
 		require($file);
 	}
