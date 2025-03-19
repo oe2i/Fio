@@ -4,10 +4,34 @@ namespace Fio;
 
 class oAsset
 {
+	// • === css »
+	public static function css($css)
+	{
+		return '/asset/css/' . $css . '.css';
+	}
+
+
+
+	// • === js »
+	public static function js($js)
+	{
+		return '/asset/js/' . $js . '.js';
+	}
+
+
+
 	// • === image »
 	public static function image($image)
 	{
 		return '/asset/image/' . $image;
+	}
+
+
+
+	// • === favicon »
+	public static function favicon($image = 'favicon.png')
+	{
+		return '/asset/favicon/' . $image;
 	}
 
 
