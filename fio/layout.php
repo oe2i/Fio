@@ -4,6 +4,14 @@ namespace Fio;
 
 class oLayout
 {
+	// • === piece »
+	public static function piece($file, $path = null)
+	{
+		return oInc::piece(file: $file, path: $path);
+	}
+
+
+
 	// • === slice »
 	public static function slice($file)
 	{
@@ -28,17 +36,14 @@ class oLayout
 
 
 
-
-
 	// • === nav »
 	public static function nav($file = 'navigation')
 	{
 		if ($file === 'navigation') {
-			$file = oInc::slice($file);
+			return oInc::slice($file);
 		} else {
-			$file = oInc::slice('nav' . Fio::property('DS') . $file);
+			return oInc::slice('nav' . Fio::property('DS') . $file);
 		}
-		return $file;
 	}
 
 
