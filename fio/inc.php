@@ -25,6 +25,16 @@ class oInc
 
 
 
+	// • === piece »
+	public static function piece($file, $vars = null, $path = null)
+	{
+		$file = oPath::piece($path) . $file . '.php';
+		exit($file);
+		return self::load($file, 'Piece', $vars);
+	}
+
+
+
 	// • === slice »
 	public static function slice($file, $vars = null)
 	{
