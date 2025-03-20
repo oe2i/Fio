@@ -24,6 +24,17 @@ class oPath
 
 
 
+	// • === piece »
+	public static function piece($path = null)
+	{
+		if (empty($path)) {
+			$path = self::layout();
+		}
+		return $path . 'piece' . Fio::property('DS');
+	}
+
+
+
 	// • === slice »
 	public static function slice()
 	{
