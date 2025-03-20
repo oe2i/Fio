@@ -29,6 +29,8 @@ class oPath
 	{
 		if (empty($path)) {
 			$path = self::layout();
+		} else {
+			$path = self::source() . $path;
 		}
 		return $path . 'piece' . Fio::property('DS');
 	}
