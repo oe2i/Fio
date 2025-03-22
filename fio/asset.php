@@ -29,9 +29,9 @@ class oAsset
 
 
 	// • === favicon »
-	public static function favicon($image = 'favicon.png')
+	public static function favicon($favicon = 'favicon.png')
 	{
-		return '/asset/favicon/' . $image;
+		return '/asset/favicon/' . $favicon;
 	}
 
 
