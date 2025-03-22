@@ -15,7 +15,6 @@ class oInc
 		// 	// $ven = $vars;
 		// 	$vars = compact('vars');
 		// }
-		// Fio::dump($vars);
 		if (is_array($vars)) {
 			extract($vars);
 		}
@@ -26,10 +25,9 @@ class oInc
 
 
 	// • === piece »
-	public static function piece($file, $vars = null, $path = null)
+	public static function piece($file, $path = null, $vars = null)
 	{
 		$file = oPath::piece($path) . $file . '.php';
-		exit($file);
 		return self::load($file, 'Piece', $vars);
 	}
 
