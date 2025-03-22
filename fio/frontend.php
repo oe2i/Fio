@@ -8,7 +8,7 @@ class oFrontend
 	// • === title »
 	public static function title(?string $title = null)
 	{
-		return '<title>' . Fio::site('firm') . (!empty($title) ? ' - ' . $title : '') . '</title>';
+		return '<title>' . Fio::site('firm') . (!empty($title) ? ' - ' . ucfirst($title) : '') . '</title>';
 	}
 
 
