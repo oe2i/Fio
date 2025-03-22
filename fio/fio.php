@@ -2,6 +2,8 @@
 
 namespace Fio;
 
+use Throwable;
+
 class Fio
 {
 	// • property
@@ -56,9 +58,9 @@ class Fio
 
 
 	// • === dump »
-	public static function dump($var)
+	public static function dump($dump)
 	{
-		exit('<pre><tt><strong style="color:#B39062;">Fio™ Framework!</strong><br/><div style="color:#7B027B; padding: 2px;">' . var_export($var, true) . '</div></tt></pre>');
+		exit('<pre><tt><strong style="color:#B39062;">Fio™ Framework!</strong><br/><div style="color:#7B027B; padding: 2px;">' . var_export($dump, true) . '</div></tt></pre>');
 	}
 
 
@@ -78,11 +80,43 @@ class Fio
 		}
 		if (!empty($message)) {
 			if (!empty($extra)) {
+				if (is_array($extra)) {
+					$implode = implode(" • ", array_map(fn($key, $value) => "$key: $value", array_keys($extra), $extra));
+					$extra = $implode;
+				}
 				$message .= ' ➝ [<small style="color: #A62626;"><em>' . $extra . '</em></small>]';
 			}
 			$output .= '<span style="color:#7B027B; padding: 2px;">' . ucfirst($message) . '</span>';
 		}
 		exit($output);
+	}
+
+
+
+	// • === tryCatch »
+	public static function tryCatch(callable $callback, $default = null, $caller = null)
+	{
+		try {
+			return $callback();
+		} catch (Throwable $e) {
+
+			if (!empty($default)) {
+				return $default;
+			}
+
+			$extra = null;
+
+			$exception = get_class($e);
+			if (!empty($exception)) {
+				$extra['type'] = $exception;
+			}
+
+			if (is_array($extra)) {
+				$extra['reason'] = $e->getMessage();
+			}
+
+			return self::kill(['title' => $caller, 'message' => 'exception occurred'], $extra);
+		}
 	}
 
 
@@ -132,14 +166,31 @@ class Fio
 
 
 
-	// public static function varToArray($var){
-	// 	if(is_string($var)){
-	// 		$vars = get_defined_vars();
-	// 		$varName = array_search($var, $vars, true);
-	// 		// $var = compact($var);
-	// 	}
-	// 	return $vars;
-	// }
+	// • === dbo »
+	public static function dbo()
+	{
+		return new oDBO();
+	}
+
+
+
+	// • === pdo »
+	public static function pdo()
+	{
+		$dbo = new oDBO();
+		$dbo::init('pdo');
+		return $dbo;
+	}
+
+
+
+	// • === sqli »
+	public static function sqli()
+	{
+		$dbo = new oDBO();
+		$dbo::init('sqli');
+		return $dbo;
+	}
 
 
 
