@@ -5,17 +5,17 @@ namespace Fio;
 class oLayout
 {
 	// • === piece »
-	public static function piece($file, $path = null)
+	public static function piece($file, $path = null, $vars = null)
 	{
-		return oInc::piece(file: $file, path: $path);
+		return oInc::piece($file, $path, $vars);
 	}
 
 
 
 	// • === slice »
-	public static function slice($file)
+	public static function slice($file, $vars = null)
 	{
-		return oInc::slice($file);
+		return oInc::slice($file, $vars);
 	}
 
 
