@@ -10,6 +10,7 @@ class oPDO
 	protected static $pdo;
 
 
+
 	// • === tryCatch »
 	private static function tryCatch(callable $callback, $default = null, $caller = 'PDO')
 	{
@@ -18,13 +19,11 @@ class oPDO
 
 
 
-
 	// • === error »
 	private static function error($message, $extra = null)
 	{
 		return Fio::kill(['title' => 'PDO', 'message' => $message], $extra);
 	}
-
 
 
 
@@ -46,5 +45,31 @@ class oPDO
 			)
 		);
 		return self::$pdo;
+	}
+
+
+
+	// • === query »
+	public static function query($sql)
+	{
+		return self::$pdo->query($sql);
+	}
+
+
+
+	// • === select »
+	public static function select($table, $column = '*', $params = [], $filter = null)
+	{
+		$stmt = self::$pdo->prepare("SELECT {$column} FROM `{$table}` {$filter}");
+		$stmt->execute($params);
+		return $stmt->fetchAll();
+	}
+
+
+
+	// • === disconnect »
+	public static function disconnect()
+	{
+		return self::$pdo = null;
 	}
 }

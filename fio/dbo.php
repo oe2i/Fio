@@ -8,6 +8,7 @@ class oDBO
 	private static bool $init = false;
 	private static string $type = 'pdo';
 	protected static $connection;
+	protected static $dbc;
 
 
 
@@ -33,12 +34,41 @@ class oDBO
 
 			// ... use connection type
 			if (self::$type === 'pdo') {
-				self::$connection = oPDO::connect();
+				self::$dbc = new oPDO();
+				self::$connection = self::$dbc::connect();
 			} elseif (self::$type === 'sqli') {
-				self::$connection = oSQLi::connect();
+				self::$dbc = new oSQLi();
+				self::$connection = self::$dbc::connect();
 			}
 
 			self::$init = true;
 		}
+	}
+
+
+
+	// • === dbc »
+	public static function dbc($type = null)
+	{
+		if (!self::$dbc) {
+			self::init($type);
+		}
+		return self::$dbc;
+	}
+
+
+
+	// • === query »
+	public static function query($sql, $type = null)
+	{
+		return self::dbc($type)->query($sql);
+	}
+
+
+
+	// • === select »
+	public static function select($table, $column = '*', $params = [], $filter = null, $type = null)
+	{
+		return self::dbc($type)->select($table, $column, $params, $filter);
 	}
 }

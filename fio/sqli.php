@@ -35,4 +35,20 @@ class oSQLi
 		self::$mysqli->set_charset("utf8mb4");
 		return self::$mysqli;
 	}
+
+
+
+	// • === query »
+	public static function query($sql)
+	{
+		return self::$mysqli->query($sql);
+	}
+
+
+
+	// • === disconnect »
+	public static function disconnect()
+	{
+		return self::$mysqli->close();
+	}
 }
