@@ -66,9 +66,24 @@ class oDBO
 
 
 
-	// • === select »
-	public static function select($table, $column = '*', $params = [], $filter = null, $type = null)
+	// • === prepare »
+	public function prepare($sql, $param = [], $action = null, $type = null)
 	{
-		return self::dbc($type)->select($table, $column, $params, $filter);
+		return self::dbc($type)->prepare($sql, $param, $action);
+	}
+
+
+
+	// • === lastID »
+	public static function lastID($type = null)
+	{
+		return self::dbc($type)->lastID();
+	}
+
+
+	// • === create »
+	public static function create($table, $param, $action = 'execute', $type = null)
+	{
+		return self::dbc($type)->create($table, $param, $action);
 	}
 }

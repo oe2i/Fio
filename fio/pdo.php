@@ -57,12 +57,48 @@ class oPDO
 
 
 
-	// • === select »
-	public static function select($table, $column = '*', $params = [], $filter = null)
+	// • === prepare »
+	public static function prepare($sql, $param = [], $action = null)
 	{
-		$stmt = self::$pdo->prepare("SELECT {$column} FROM `{$table}` {$filter}");
-		$stmt->execute($params);
-		return $stmt->fetchAll();
+		return self::tryCatch(function () use ($sql, $param, $action) {
+			$sql = trim($sql);
+			$stmt = self::$pdo->prepare($sql);
+
+			foreach ($param as $key => &$value) {
+				$stmt->bindParam(":$key", $value);
+			}
+
+			$execute = $stmt->execute();
+
+			if (preg_match('/^\s*(INSERT|UPDATE|DELETE)\b/i', $sql) || $action === 'execute') {
+				return $execute;
+			} elseif ($action === 'fetch') {
+				return $stmt->fetch();
+			}
+
+			return $stmt->fetchAll();
+		});
+	}
+
+
+
+	// • === lastID »
+	public static function lastID()
+	{
+		return self::$pdo->lastInsertId();
+	}
+
+
+
+	// • === create »
+	public static function create($table, $param, $action = 'execute')
+	{
+		$keys = array_keys($param);
+		$columns = implode(", ", $keys);
+		$placeholders = ':' . implode(", :", $keys);
+		$sql = "INSERT INTO `{$table}` ({$columns}) VALUES ({$placeholders})";
+		// Fio::dump($sql);
+		return self::prepare($sql, $param, $action);
 	}
 
 
