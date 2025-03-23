@@ -166,6 +166,14 @@ class Fio
 
 
 
+	// • === input »
+	public static function input()
+	{
+		return new oInput();
+	}
+
+
+
 	// • === dbo »
 	public static function dbo()
 	{
