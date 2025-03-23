@@ -90,6 +90,37 @@ class oPDO
 
 
 
+	// • === where »
+	public static function where($filter = null, &$param = null)
+	{
+		if ($filter) {
+
+			// ... filter is array
+			if (is_array($filter)) {
+				if (empty($param)) {
+					$param = $filter;
+				} elseif (is_array($param)) {
+					$param = array_merge($filter);
+				}
+
+				// » to string
+				$bind = $filter;
+				$filter = implode(' AND ', array_map(fn($key) => "$key = :$key", array_keys($bind)));
+			}
+
+			// ... filter is string
+			if (is_string($filter)) {
+				$filter = trim($filter);
+				if (!preg_match('/^\s*WHERE\b/i', $filter)) {
+					$filter = 'WHERE ' . $filter;
+				}
+			}
+		}
+		return $filter;
+	}
+
+
+
 	// • === create »
 	public static function create($table, $param, $action = 'execute')
 	{
@@ -97,8 +128,38 @@ class oPDO
 		$columns = implode(", ", $keys);
 		$placeholders = ':' . implode(", :", $keys);
 		$sql = "INSERT INTO `{$table}` ({$columns}) VALUES ({$placeholders})";
-		// Fio::dump($sql);
 		return self::prepare($sql, $param, $action);
+	}
+
+
+
+	// ◈ === delete »
+	public static function delete($table, $filter, $action = 'execute')
+	{
+		// $param = [];
+		// $bindFilter = '';
+		// if (!empty($filter)) {
+		// 	if (is_array($filter)) {
+
+		// 		foreach ($filter as $key => $value) {
+		// 			$bindFilter .= $key . ' = :' . $key . ' AND ';
+		// 		}
+		// 		$bindFilter = trim($bindFilter, ' AND ');
+		// 	} elseif (is_string($filter)) {
+		// 		$bindFilter = $filter;
+		// 	}
+		// }
+
+
+
+
+
+
+		$param = null;
+		$filter = self::where($filter, $param);
+		$sql = "DELETE FROM `{$table}` $filter";
+		Fio::dump(['sql' => $sql, 'param' => $param]);
+		// return self::prepare($sql, $param, $action);
 	}
 
 
