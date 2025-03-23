@@ -133,25 +133,48 @@ class oPDO
 
 
 
-	// ◈ === update »
+	// • === read »
+	public static function read($table, $column = '*', $filter = null, $action = 'fetchAll')
+	{
+		if (is_array($column)) {
+			$column = implode(', ', $column);
+		}
+		$column = trim($column);
+		$param = null;
+		$filter = self::where($filter, $param);
+		$sql = "SELECT $column FROM `$table` $filter";
+		return self::prepare($sql, $param, $action);
+	}
+	// Fio::dump(['sql' => $sql, 'param' => $param]);
+
+
+
+	// • === update »
 	public static function update($table, $param, $filter, $action = 'execute')
 	{
-		$columns = implode(', ', array_map(fn($key) => "$key = :$key", array_keys($param)));
+		$column = implode(', ', array_map(fn($key) => "$key = :$key", array_keys($param)));
 		$filter = self::where($filter, $param);
-		$sql = "UPDATE `{$table}` SET $columns $filter";
-		// Fio::dump(['sql' => $sql, 'param' => $param]);
+		$sql = "UPDATE `$table` SET $column $filter";
 		return self::prepare($sql, $param, $action);
 	}
 
 
 
-	// ◈ === delete »
+	// • === delete »
 	public static function delete($table, $filter, $action = 'execute')
 	{
 		$param = null;
 		$filter = self::where($filter, $param);
-		$sql = "DELETE FROM `{$table}` $filter";
+		$sql = "DELETE FROM `$table` $filter";
 		return self::prepare($sql, $param, $action);
+	}
+
+
+
+	// • === find »
+	public static function find($table, $column = '*', $filter = null)
+	{
+		return self::read($table, $column, $filter, 'fetch');
 	}
 
 
