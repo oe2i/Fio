@@ -89,6 +89,14 @@ class oDBO
 
 
 
+	// • === read »
+	public static function read($table, $column = '*', $filter = null, $action = 'fetchAll', $type = null)
+	{
+		return self::dbc($type)->read($table, $column, $filter, $action);
+	}
+
+
+
 	// • === update »
 	public static function update($table, $param = null, $filter = null, $action = 'execute', $type = null)
 	{
@@ -101,5 +109,12 @@ class oDBO
 	public static function delete($table, $filter = null, $action = 'execute', $type = null)
 	{
 		return self::dbc($type)->delete($table, $filter, $action);
+	}
+
+
+	// • === find »
+	public static function find($table, $column = '*', $filter = null, $type = null)
+	{
+		return self::dbc($type)->find($table, $column, $filter);
 	}
 }
