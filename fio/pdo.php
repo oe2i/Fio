@@ -64,8 +64,10 @@ class oPDO
 			$sql = trim($sql);
 			$stmt = self::$pdo->prepare($sql);
 
-			foreach ($param as $key => &$value) {
-				$stmt->bindParam(":$key", $value);
+			if (!empty($param)) {
+				foreach ($param as $key => &$value) {
+					$stmt->bindParam(":$key", $value);
+				}
 			}
 
 			$execute = $stmt->execute();
@@ -145,7 +147,6 @@ class oPDO
 		$sql = "SELECT $column FROM `$table` $filter";
 		return self::prepare($sql, $param, $action);
 	}
-	// Fio::dump(['sql' => $sql, 'param' => $param]);
 
 
 
@@ -176,6 +177,15 @@ class oPDO
 	{
 		return self::read($table, $column, $filter, 'fetch');
 	}
+
+
+
+	// • === findAll »
+	public static function findAll($table, $column = '*')
+	{
+		return self::read(table: $table, column: $column,  action: 'fetchAll');
+	}
+
 
 
 

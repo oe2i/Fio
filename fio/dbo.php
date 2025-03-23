@@ -117,4 +117,12 @@ class oDBO
 	{
 		return self::dbc($type)->find($table, $column, $filter);
 	}
+
+
+
+	// • === findAll »
+	public static function findAll($table, $column = '*', $type = null)
+	{
+		return self::dbc($type)->findAll($table, $column);
+	}
 }
