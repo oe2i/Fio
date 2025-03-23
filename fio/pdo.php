@@ -100,7 +100,7 @@ class oPDO
 				if (empty($param)) {
 					$param = $filter;
 				} elseif (is_array($param)) {
-					$param = array_merge($filter);
+					$param = array_merge($param, $filter);
 				}
 
 				// » to string
@@ -133,33 +133,25 @@ class oPDO
 
 
 
+	// ◈ === update »
+	public static function update($table, $param, $filter, $action = 'execute')
+	{
+		$columns = implode(', ', array_map(fn($key) => "$key = :$key", array_keys($param)));
+		$filter = self::where($filter, $param);
+		$sql = "UPDATE `{$table}` SET $columns $filter";
+		// Fio::dump(['sql' => $sql, 'param' => $param]);
+		return self::prepare($sql, $param, $action);
+	}
+
+
+
 	// ◈ === delete »
 	public static function delete($table, $filter, $action = 'execute')
 	{
-		// $param = [];
-		// $bindFilter = '';
-		// if (!empty($filter)) {
-		// 	if (is_array($filter)) {
-
-		// 		foreach ($filter as $key => $value) {
-		// 			$bindFilter .= $key . ' = :' . $key . ' AND ';
-		// 		}
-		// 		$bindFilter = trim($bindFilter, ' AND ');
-		// 	} elseif (is_string($filter)) {
-		// 		$bindFilter = $filter;
-		// 	}
-		// }
-
-
-
-
-
-
 		$param = null;
 		$filter = self::where($filter, $param);
 		$sql = "DELETE FROM `{$table}` $filter";
-		Fio::dump(['sql' => $sql, 'param' => $param]);
-		// return self::prepare($sql, $param, $action);
+		return self::prepare($sql, $param, $action);
 	}
 
 
