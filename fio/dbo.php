@@ -58,17 +58,20 @@ class oDBO
 
 
 
-	// • === query »
-	public static function query($sql, $type = null)
+	// • === prepare »
+	public function prepare($sql, $param = [], $action = null, $type = null)
 	{
-		return self::dbc($type)->query($sql);
+		return self::dbc($type)->prepare($sql, $param, $action);
 	}
 
 
 
-	// • === prepare »
-	public function prepare($sql, $param = [], $action = null, $type = null)
+	// • === query »
+	public static function query($sql, $param = [], $action = null, $type = null)
 	{
+		if (empty($param) && !$action) {
+			return self::dbc($type)->query($sql);
+		}
 		return self::dbc($type)->prepare($sql, $param, $action);
 	}
 
