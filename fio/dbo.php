@@ -86,4 +86,20 @@ class oDBO
 	{
 		return self::dbc($type)->create($table, $param, $action);
 	}
+
+
+
+	// • === update »
+	public static function update($table, $param = null, $filter = null, $action = 'execute', $type = null)
+	{
+		return self::dbc($type)->update($table, $param, $filter, $action);
+	}
+
+
+
+	// • === delete »
+	public static function delete($table, $filter = null, $action = 'execute', $type = null)
+	{
+		return self::dbc($type)->delete($table, $filter, $action);
+	}
 }
